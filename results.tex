@@ -1,0 +1,25 @@
+
+\section{Results and Discussion}
+% Describe evaluation methodology and significant results in the evaluation section
+% Evaluate the selected approach and analyze why the selected approach is good?
+%   Provide an intuitive description of the algorithms, their correctness and their complexity
+The simulation was run
+on a Dell Laptop with a 11th Gen Intel(R) Core(TM) i7-11800H processor (8 cores, 16 threads)
+running at 2.30GHz, 64.0 GB of installed RAM,
+a 64-bit operating system with an x64-based processor
+using Python3.10.
+
+We let $P = 100$.
+In our platform, all uncompressed and unencrypted
+values in $D$ occupy $b = 18$ bytes.
+Therefore, the cache size $P' = Q' = 1800$ bytes.
+Furthermore, no compression and no encryption
+was enabled.
+
+The simulation was run as a sustained load,
+as described in Algorithm~\ref{alg:simulation}.
+This means that it runs until completion
+for
+$N$ requests. For example, in $N=1000$
+we generate 1000 data points for both
+the hit and miss rates.
