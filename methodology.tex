@@ -295,7 +295,38 @@ updated in the cache table $(C)$. In concrete, we have the following triggers:
 Assume that a new value $v$ is requested to be inserted into the cache.
 If $s_{used} + s_v > s_{max}$, then the cache must evict elements
 until $s_{used} + s_v \leq s_{max}$. The eviction policy is cache dependent.
-Refer to sections~\ref{sec:lru} and~\ref{sec:lfu} for more details.
+Figure~\ref{fig:general_put_workflow} as to how eviction policies
+fit into the put workflows.
+Refer to sections~\ref{sec:lru} and~\ref{sec:lfu} for more details
+on eviction policies.
+
+%% General put activity diagram.
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}[node distance=1.5cm]
+        % Frame
+        \draw [rounded corners] (-3.5,-1.5) rectangle (4.75, -8.5);
+        \node (title) at (2.5, -2) {\textbf{Put diagram}};
+        
+        % Nodes
+        \node[initial] (initial) at (0,-1) {};
+        \node[action, below of = initial] (submit)  {Submit $(k, v)$};
+        \node[decision, below of = submit] (maxCapacityDecision)  {};
+        \node[action, right of = maxCapacityDecision, xshift=1.75 cm] (reject) {Reject Request};
+        \node[decision, below of = maxCapacityDecision] (fitsDecision) {};
+        \node[action, right of = fitsDecision, xshift=1.75 cm](insert){Insert $(k, v)$};
+        \node[action, below of = fitsDecision](evict){Evict element by policy};
+        \draw [arrow] (initial) -- (submit);
+        \draw [arrow] (submit) -- (maxCapacityDecision);
+        \draw [arrow] (maxCapacityDecision) -- (reject)node[midway, above]{$> s_{max}$};
+        \draw [arrow] (maxCapacityDecision) -- (fitsDecision) node[midway, left]{$\leq s_{max}$};
+        \draw [arrow] (fitsDecision) -- (insert) node[midway, above]{Fits};
+        \draw [arrow] (fitsDecision) -- (evict) node[midway, right]{No fits};
+        \draw [arrow] (evict.west) -- ++(-1cm, 0) -- ++(0, 1.5) -- (fitsDecision.west);
+    \end{tikzpicture}
+    \caption{Activity diagram for general put showing eviction.}
+    \label{fig:general_put_workflow}
+\end{figure}
 
 \subsubsection{Persistency}
 One main goal of this project is to have a cache that is \textit{persistent}.
@@ -326,11 +357,20 @@ in the metadata table $(M)$. This behavior is enforced by the UNIQUE
 constraint in the metadata table $(M)$ and inserting
 the settings using the \texttt{ON CONFLICT DO NOTHING} clause.
 
+%% LRUCache subsection
 \subsection{LRUCache\label{sec:lru}}
+
+
+
+%5 LFUCache subsection
 \subsection{LFUCache\label{sec:lfu}}
 
+
+%% DiskStorage subsection
 \subsection{DiskStorage}
 
+
+%% Testing subsection
 \subsection{Testing}
 All the functionality of the \sqlitecache~package is \textbf{functionally} tested using
 the \texttt{pytest} framework. The tests are located inside the \texttt{tests} directory.
@@ -340,6 +380,8 @@ for Python. Furthermore, the isolation and lifecycle of the tests and fixtures
 are well defined. This allows us to have a clean and isolated environment
 for each test.
 
+
+%% Simulation Subsection
 \subsection{Simulation\label{sec:simulation}}
 The following section describes in detail the simulation, focusing on the differences
 between our methodology and the methodology used in~\cite{shah2023ImprovedCacheEviction}.

@@ -18,7 +18,16 @@
     linkcolor=black,
     citecolor=black,
 }
-\tikzset{singlestate/.style={draw,fill=yellow!20, rounded corners}}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta,arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\tikzset{
+  initial/.style={circle, fill},
+  decision/.style={diamond, black, draw},
+  action/.style={rectangle, draw, rounded corners},
+  arrow/.style={draw, -{Latex[length=3mm]}, thick}
+  }
 
 % Title and Author
 \title{SQLiteCache: A single-threaded, persistent, and high capacity key-value cache using SQLite}
