@@ -9,7 +9,7 @@
 \usepackage{tikz-uml}
 \usepackage{tikz}
 \usepackage{tcolorbox}
-\usepackage{minted}
+%\usepackage{minted}
 \usepackage{algorithm} % Used for writing algorithms in a paper
 \usepackage[noend]{algpseudocode}
 \usepackage{hyperref}
@@ -423,14 +423,25 @@ It is not clear why the
 authors in~\cite{shah2023ImprovedCacheEviction}
 automatically insert an element when it is missing.
 A simple example of how a cache
-is generally used is provided below:
-\begin{minted}{python3}
-    if cache.get("key") is None:
-        value = expensive_op()
-        cache.put("key", value)
-    return cache.get("key")
-\end{minted}
-Although the above is a Python code snippet, the same
+is generally used is provided in \autoref{fig:cache_example}.
+
+% python cache code example
+\begin{figure}[ht]
+    \centering
+    \begin{tcolorbox}[colback=gray!5!white, colframe=gray!75!black, title=General Cache Example]
+    \begin{verbatim}
+if cache.get("key") is None:
+    value = expensive_op()
+    cache.put("key", value)
+return cache.get("key")
+    \end{verbatim}
+    \end{tcolorbox}
+    \caption{Example of cache usage in Python.}
+    \label{fig:cache_example}
+\end{figure}
+
+Although \autoref{fig:cache_example}
+represents a Python code snippet, the same
 applies for other scenarios. For example,
 a database stores pages in the buffer. When a
 page fault
@@ -449,7 +460,7 @@ we can insert by calling \texttt{put(k, k)}.
 This change makes it possible to run our simulation
 as close as possible to~\cite{shah2023ImprovedCacheEviction}.
 
-The final difference is hit amd miss rates tracking.
+The final difference is hit and miss rates tracking.
 All of our cache classes keep up-to-date hit and miss
 rate statistics. This is done internally, with an I/O overhead.
 Given that the HybridCache used the TTL feature
@@ -457,6 +468,27 @@ of the LFUCache, \textit{runtime} has a direct
 impact. To reduce the I/O overhead
 of retrieving the hit and miss rates from
 the cache, we use an auxiliary in-memory hash map.
+For a concise version of the simulation,
+refer to Algorithm~\ref{alg:simulation}.
+
+\begin{algorithm}
+    \caption{Simulation for any given Cache}
+    \label{alg:simulation}
+    \begin{algorithmic}[1]
+    \Require Cache $C$; Dataset $D = \{(k, v) \mid k = v, k \in \{\text{`001'}, \text{`002'}, \ldots, \text{`500'}\}\}$
+    \Require $P=100$, value size $b$, and Cache capacity $P'$
+    \Require $N$ total requests,
+        in-memory tracking hashmap $H$
+    \For{$i = 1$ to $N$}
+        \State Randomly select $(k, v)$ from $D$
+        \State $value \gets \text{C.get}(k)$
+        \If{$value = \text{None}$}
+            \State $\text{C.put}(k, v)$
+        \EndIf
+        \State Push hit rate, miss rate, $i$ into $H$.
+    \EndFor
+    \end{algorithmic}
+\end{algorithm}
 
 \section{Results and Discussion}
 % Describe evaluation methodology and significant results in the evaluation section
