@@ -470,8 +470,9 @@ the \texttt{pytest} framework. The tests are located inside the \texttt{tests} d
 We selected the pytest framework because it is the most popular testing framework
 for Python. Furthermore, the isolation and lifecycle of the tests and fixtures
 are well defined. This allows us to have a clean and isolated environment
-for each test.
-
+for each test. Finally, any long-running tests,
+such as tests for TTL based policies and simulation tests,
+are marked as \textit{slow}.
 
 %% Simulation Subsection
 \subsection{Simulation\label{sec:simulation}}
