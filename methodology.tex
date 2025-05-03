@@ -295,7 +295,9 @@ updated in the cache table $(C)$. In concrete, we have the following triggers:
 Assume that a new value $v$ is requested to be inserted into the cache.
 If $s_{used} + s_v > s_{max}$, then the cache must evict elements
 until $s_{used} + s_v \leq s_{max}$. The eviction policy is cache dependent.
-Figure~\ref{fig:general_put_workflow} as to how eviction policies
+Refer to
+Figure~\ref{fig:general_put_workflow} for an activity
+diagram about how eviction policies
 fit into the put workflows.
 Refer to sections~\ref{sec:lru} and~\ref{sec:lfu} for more details
 on eviction policies.
@@ -359,16 +361,93 @@ the settings using the \texttt{ON CONFLICT DO NOTHING} clause.
 
 %% LRUCache subsection
 \subsection{LRUCache\label{sec:lru}}
+The schema used for the cache table $C$ used by the LRUCache
+is given by \autoref{fig:lru_cachetable_relation}. We track
+recency by using the \texttt{accessed\_at} attribute. There
+are not triggers that automatically update this value. Instead,
+we update this value for every call to the \texttt{get(k)}
+method.
 
+During eviction, we sort the values
+by the access time and evict enough items
+such that a new $(k, v)$ pair can be inserted.
 
+\begin{figure}[!htp]
+    \centering
+    \begin{tikzpicture}
+        \umlclass[type=class]{LRUPrimaryCache}{
+            key : INTEGER \\
+            filename : TEXT \\
+            size : INTEGER \\
+            stored\_at : TIMESTAMP \\
+            accessed\_at : INTEGER
+        }{}
+    \end{tikzpicture}
+    \caption{UML class diagram for the LRUPrimaryCache relation.}
+    \label{fig:lru_cachetable_relation}
+\end{figure}
 
-%5 LFUCache subsection
+% LFUCache subsection
 \subsection{LFUCache\label{sec:lfu}}
+The schema use for the cache table $C$ is
+described in \autoref{fig:lru_cachetable_relation}.
+Note that we use the \texttt{accessed\_count} attribute
+in $C$ to track how many times a particular key
+has been accessed. However, LFUCache supports two eviction
+policies: ttl based and accessed count based.
 
+In count based eviction,
+we sort the elements by their access count and
+start evicting them until enough space is created
+such that a new value $v$ fits into the cache.
+We do not use triggers to update access counts. Instead,
+we manually increment the counter whenever a key is requested.
+We consider a request any moment \texttt{get(k)} gets invoked.
+
+In ttl based eviction,
+we recompute the a new ttl by
+\[
+ttl_{new} = ttl - (now - stored\_at)
+\]
+where $now$ is the current timestamp of the system.
+After recomputing the new ttl, we sort the $(k, v)$
+pairs until enough space becomes available to insert a new $v'$.
+
+It is important to note that we handle expired $(k, v)$ pairs
+on demand. This means that there is no background process
+constantly evicting expired elements. We perform
+a cleanup of expired data whenever data is requested
+from the cache by using ~\texttt{get(k)}. Additionally,
+we perform cleanup whenever eviction needs to take place.
+
+\begin{figure}[!htp]
+    \centering
+    \begin{tikzpicture}
+        \umlclass[type=class]{LFUPrimaryCache}{
+            key : INTEGER \\
+            filename : TEXT \\
+            size : INTEGER \\
+            stored\_at : TIMESTAMP \\
+            accessed\_count : INTEGER \\
+            ttl : REAL
+        }{}
+    \end{tikzpicture}
+    \caption{UML class diagram for the LFUPrimaryCache relation.}
+    \label{fig:lfu_cachetable_relation}
+\end{figure}
 
 %% DiskStorage subsection
 \subsection{DiskStorage}
+DiskStorage is a python class responsible for managing a given directory $dir$.
+Under the hood, the values $v$ are stored in different files
+under $dir$. Because its responsibility is to handle values,
+all value oriented operations such as compression/decompression,
+encryption/encryption are provided as methods on this class.
 
+The primary motivation of having the value storage decoupled
+from the primary cache in the SQLite database is the possibility
+of extending value storage using a different protocol for serializing,
+such as JSON.
 
 %% Testing subsection
 \subsection{Testing}
