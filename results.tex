@@ -7,7 +7,12 @@ The simulation was run
 on a Dell Laptop with a 11th Gen Intel(R) Core(TM) i7-11800H processor (8 cores, 16 threads)
 running at 2.30GHz, 64.0 GB of installed RAM,
 a 64-bit operating system with an x64-based processor
-using Python3.10.
+using Python3.10 and pytest as the driver.
+We selected Pytest because the test-isolation generalizes
+well for simulations. Therefore, simulations
+are `tests' marked with the \texttt{@pytest.mark.simulation}
+marker. Because running a simulation is slow,
+these tests are also marked as \textit{slow}.
 
 We let $P = 100$.
 In our platform, all uncompressed and unencrypted
