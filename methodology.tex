@@ -1,4 +1,3 @@
-
 \section{Methodology}
 % Include a detailed description of your methodology, analysis, and implementation in the technical section
 % o Describe key design goals in designing your database
@@ -68,8 +67,22 @@ are provided in Section~\ref{sec:simulation}.
 % Overall architecture
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=3.25in]{images/overall_architecture.png}
-    \caption{Architecture of SQLiteCache}
+    \begin{tikzpicture}[node distance=2cm]
+        % Define nodes
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=1.5cm] (python) {Python Interface};
+        \node[draw, cylinder, shape border rotate=90, aspect=0.3, minimum height=1.5cm, minimum width=1.5cm, below=of python] (sqlite) {SQLite};
+        \node[draw, cylinder, shape border rotate=90, aspect=0.3, minimum height=1.5cm, minimum width=1.5cm, below=of sqlite] (fs) {filesystem};
+        
+        % Group background for SQLite and filesystem
+        \begin{scope}[on background layer]
+            \node[fill=green!10, fit=(sqlite)(fs), inner sep=0.5cm, rounded corners, label=below:Local Environment] {};
+        \end{scope}
+        
+        % Arrows and labels
+        \draw[->, thick] (python) -- node[right, font=\bfseries] {interacts with} (sqlite);
+        \draw[->, thick] (sqlite) -- node[right, font=\bfseries] {stores values} (fs);
+    \end{tikzpicture}
+    \caption{Communication diagram showing the architecture of SQLiteCache.}
     \label{fig:architecture}
 \end{figure}
 
