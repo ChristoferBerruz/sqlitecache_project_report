@@ -472,7 +472,16 @@ for Python. Furthermore, the isolation and lifecycle of the tests and fixtures
 are well defined. This allows us to have a clean and isolated environment
 for each test. Finally, any long-running tests,
 such as tests for TTL based policies and simulation tests,
-are marked as \textit{slow}.
+are marked as \textit{slow}. Refer
+to \autoref{fig:testing_running} for a
+screenshot of the suite of tests being run.
+
+\begin{figure}[!htp]
+    \centering
+    \includegraphics[width=\columnwidth]{images/testing.png} 
+    \caption{Testing using pytest.}
+    \label{fig:testing_running}
+\end{figure}
 
 %% Simulation Subsection
 \subsection{Simulation\label{sec:simulation}}
