@@ -37,9 +37,10 @@ Therefore, the cache size $P' = Q' = 1800$ bytes.
 Furthermore, no compression and no encryption
 was enabled.
 
-The simulation was run as a sustained load,
+The simulation was run as a sustained load
+with $N = 100,000$ requests,
 as described in Algorithm~\ref{alg:simulation}.
-This means that it runs until completion
+This means that the simulation runs until completion
 for
 $N$ requests. For example, in $N=1000$
 we generate 1000 data points for both
@@ -47,54 +48,10 @@ the hit and miss rates. The duration
 of each simulation run was dependent
 on the eviction policy being tested.
 TTL based policies, such as LFUCacheTTL
-and HybridCache as seen in \autoref{fig:simulation}.
-
-\begin{figure*}[!htp]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            width=\linewidth*0.9,
-            height=8cm,
-            xlabel={n\_requests},
-            ylabel={hit\_rate},
-            grid=major,
-            legend style={at={(0.95,0.05)}, anchor=south east},
-            title={Hit Rate vs. Number of Requests}
-        ]
-        \addplot[
-            color=blue,
-        ] table [
-            col sep=comma,
-            x={requests},
-            y={hit_rate}
-        ] {data/LRUCacheSimulationResults.csv};
-        \addplot[
-            color=red,
-        ] table [
-            col sep=comma,
-            x={requests},
-            y={hit_rate}
-        ] {data/LFUCacheSimulationResults.csv};
-        \addplot[
-            color=orange,
-        ] table [
-            col sep=comma,
-            x={requests},
-            y={hit_rate}
-        ] {data/LFUCacheTTLSimulationResults.csv};
-        \addplot[
-            color=black,
-        ] table [
-            col sep=comma,
-            x={requests},
-            y={hit_rate}
-        ] {data/HybridCacheSimulationResults.csv};
-        \legend{LRUCache, LFUCache, LFUCacheTTL, HybridCache}
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Hit rate as a function of number of requests for different cache eviction policies.}
-    \label{fig:hit_rate_plot}
-\end{figure*}
+and HybridCache
+took the longest. Please refer to \autoref{tab:test_simulation_metrics}
+for a detailed view of the runtime of the simulations
+depending on the eviction policy.
 
 A total of four eviction policies were tested:
 LRU, LFU, LFU with TTL, and Hybrid.
@@ -102,7 +59,36 @@ The results of the hit rate vs. the number
 of request for each eviction policy is summarized
 in \autoref{fig:hit_rate_plot}.
 
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{images/hit_rate_plot.eps} % Replace with the path to your EPS file
+    \caption{Hit rate as a function of requests among different eviction policies}
+    \label{fig:hit_rate_plot}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{images/miss_rate_plot.eps} % Replace with the path to your EPS file
+    \caption{Hit rate as a function of requests among different eviction policies}
+    \label{fig:miss_rate_plot}
+\end{figure*}
+
+\begin{table}[ht]
+    \centering
+    \caption{Runtime metrics for different simulations with 100,000 requests}
+    \label{tab:test_simulation_metrics}
+    \begin{tabularx}{\linewidth}{XX}
+        \toprule
+        \textbf{Cache} & \textbf{Runtime (s)} \\
+        \midrule
+        HybridCache & 8484.57\\
+        LFUCache (TTL) & 8339.01\\
+        LRUCache & 8190.93\\
+        LFUCache & 8169.70\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
 It is clear that the HybridCache policy performs significantly
-better than all other policies. The LRUCache performs the worst
+better than all other policies. The LFU with TTL performs the worst
 among all eviction policies. These results
 are in alignment with~\cite{shah2023ImprovedCacheEviction}.
