@@ -3,6 +3,7 @@
 % Describe evaluation methodology and significant results in the evaluation section
 % Evaluate the selected approach and analyze why the selected approach is good?
 %   Provide an intuitive description of the algorithms, their correctness and their complexity
+\subsection{Simulation Overview}
 The simulation was run
 on a Dell Laptop with a 11th Gen Intel(R) Core(TM) i7-11800H processor (8 cores, 16 threads)
 running at 2.30GHz, 64.0 GB of installed RAM,
@@ -13,6 +14,7 @@ well for simulations. Therefore, simulations
 are `tests' marked with the \texttt{@pytest.mark.simulation}
 marker. Because running a simulation is slow,
 these tests are also marked as \textit{slow}.
+
 More importantly, we run our simulation
 distributed across multiple CPUs. Given that
 each simulation is isolated, we can run
@@ -30,6 +32,7 @@ for an example output of a running simulation.
     \label{fig:simulation}
 \end{figure}
 
+\subsection{Simulation Details}
 We let $P = 100$.
 In our platform, all uncompressed and unencrypted
 values in $D$ occupy $b = 18$ bytes.
@@ -55,22 +58,41 @@ depending on the eviction policy.
 
 A total of four eviction policies were tested:
 LRU, LFU, LFU with TTL, and Hybrid.
+For any TTL based policy, we used a TTL of 5 seconds.
+Finally, for the hybrid policy we set the threshold
+$T = 5$. Recall that $T$ is a counter threshold
+that dictates the number of times
+and item is looked up before it is
+moved from the LRUCache
+into the LFUCache with TTL.
+
+\subsection{Hit Rate analysis}
 The results of the hit rate vs. the number
 of request for each eviction policy is summarized
 in \autoref{fig:hit_rate_plot}.
 
-\begin{figure*}
+\begin{figure*}[!htp]
     \centering
     \includegraphics[width=\textwidth]{images/hit_rate_plot.eps} % Replace with the path to your EPS file
     \caption{Hit rate as a function of requests among different eviction policies}
     \label{fig:hit_rate_plot}
 \end{figure*}
-\begin{figure*}
+
+It is clear that the HybridCache policy performs significantly
+better than all other policies. The LFU with TTL performs the worst
+among all eviction policies. These results
+are in alignment with~\cite{shah2023ImprovedCacheEviction}.
+Note that both the LRUCache and LFUCache eviction
+policies converge at a hit rate of 20\%.
+\subsection{Miss Rate Analysis}
+\begin{figure*}[!htp]
     \centering
     \includegraphics[width=\textwidth]{images/miss_rate_plot.eps} % Replace with the path to your EPS file
     \caption{Hit rate as a function of requests among different eviction policies}
     \label{fig:miss_rate_plot}
 \end{figure*}
+
+\subsection{Runtime Analysis}
 
 \begin{table}[ht]
     \centering
@@ -87,8 +109,3 @@ in \autoref{fig:hit_rate_plot}.
         \bottomrule
     \end{tabularx}
 \end{table}
-
-It is clear that the HybridCache policy performs significantly
-better than all other policies. The LFU with TTL performs the worst
-among all eviction policies. These results
-are in alignment with~\cite{shah2023ImprovedCacheEviction}.

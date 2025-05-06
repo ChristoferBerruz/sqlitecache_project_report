@@ -449,6 +449,41 @@ we perform cleanup whenever eviction needs to take place.
     \label{fig:lfu_cachetable_relation}
 \end{figure}
 
+
+% Subsection to discuss the hybrid cache.
+\subsection{HybridCache\label{sec:hybrid}}
+Our HybridCache uses the eviction 
+policy defined in~\cite{shah2023ImprovedCacheEviction}.
+Internally, this cache uses a combination of an LRUCache and a
+LFUCache with TTL. Let $P, Q$ be the capacity
+of the underlying LRUCache and LFUCache objects.
+At any point in time, elements are stored in only
+one of the caches. Elements are initially placed
+into the LRUCache and they are eventually moved
+from LRUCache into the LFUCache after a particular
+access threshold is reached.
+
+Formally,
+let a HybridCache define a threshold $T$, 
+a default TTL $\tau$, and a counter $\hybridCounter$. Every time a
+value $v$ for $k$ is looked up into the cache,
+we increment $\hybridCounter[k]$. We move
+the entire $(k, v)$ pair
+from LRUCache into LFUCache 
+whenever $\hybridCounter[k] > T$
+with TTL $\tau$.
+Recall that eviction policies trigger automatically
+on insertions. Therefore, moving
+an element into the LFUCache \textbf{does not}
+bypass the eviction workflow defined in \autoref{fig:put_sequence_diagram}.
+
+Note that when getting a value $v$ for $k$,
+we perform a lookup in both LRUCache and LFUCache
+to know where it exists. Given that LFUCache with TTL
+evicts on demand, this lookup will trigger eviction
+of expired elements \textemdash~guaranteeing
+correctness.
+
 %% DiskStorage subsection
 \subsection{DiskStorage}
 DiskStorage is a python class responsible for managing a given directory $dir$.

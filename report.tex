@@ -17,6 +17,7 @@
 \usepackage{pgfplotstable}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{float}
 \pgfplotsset{compat=1.18}
 \hypersetup{
     colorlinks=true,
@@ -33,6 +34,8 @@
   action/.style={rectangle, draw, rounded corners},
   arrow/.style={draw, -{Latex[length=3mm]}, thick}
   }
+
+\DeclareMathOperator{\hybridCounter}{\mathbb{C}}
 
 % Title and Author
 \title{SQLiteCache: A single-threaded, persistent, and high capacity key-value cache using SQLite}
