@@ -1,3 +1,50 @@
+
+
 \section{Related Work}
-% Survey related work in the related work section
-Discuss related work and how your work differs or builds upon it.
+
+The exponential growth in data consumption, fueled by streaming services, mobile usage, and edge computing, has made efficient cache management a critical challenge. 
+Cache eviction strategies, which determine what data to remove when the cache is full, significantly affect cache hit ratios, latency, and overall system efficiency. 
+This review explores three prominent approaches: the machine learning-driven ECELB strategy~\cite{Zhou2023CacheEviction-LearningBeladyAlgorithm}, the partitioned LFRU policy~\cite{Bilal2017CacheManagementSchemeforEfficientContentEvictionReplication}, and the hybrid LRU+LFU policy~\cite{shah2023ImprovedCacheEviction}. 
+Through comparative analysis, we examine the theoretical and practical strengths of each, ultimately endorsing the hybrid LRU+LFU strategy for modern cache networks—particularly within edge and information-centric network (ICN) environments.
+
+\subsection{The ECELB Approach: Machine Learning Meets Belady’s Algorithm}
+
+The ECELB (Efficient Cache Eviction based on Learning and Belady) strategy, introduced by~\cite{Zhou2023CacheEviction-LearningBeladyAlgorithm}, uses machine learning to approximate Belady’s theoretically optimal algorithm. 
+Belady’s algorithm evicts the object that will be needed farthest in the future—a concept optimal in theory but impractical due to its need for future knowledge. 
+ECELB tackles this by combining Gradient Boosting Machines (GBM) for filtering and Long Short-Term Memory (LSTM) models for predicting object arrival times.
+
+The system comprises four main modules: data processing, cache pre-filtering, time prediction, and eviction rules. Historical request data generates features such as object popularity and inter-arrival time, used to train GBM and LSTM models. The GBM filters infrequently accessed objects, while the LSTM forecasts when each item will be requested next, mimicking Belady’s principle in real time.
+
+Experimental validation on datasets like MovieLens showed significantly higher hit ratios for ECELB compared to traditional strategies like LRU and LFU. Moreover, time-slot partitioning and feature reuse helped minimize prediction overhead. However, ECELB’s reliance on deep learning comes at a computational cost—training and inference, particularly in constrained environments like edge servers, can introduce latency and energy inefficiency. The method also depends on robust historical data and careful feature engineering, limiting its generalizability.
+
+\subsection{The LFRU Policy: Partitioned Caching for Dynamic Networks}
+
+Unlike ECELB’s ML-based design, the LFRU (Least Frequent Recently Used) policy proposed by~\cite{Bilal2017CacheManagementSchemeforEfficientContentEvictionReplication} balances recency and frequency through cache partitioning. It splits the cache into privileged (using LRU) and unprivileged (using an approximated LFU) sections. This design caters to ICN environments, where request rates and content popularity shift rapidly.
+
+The privileged partition handles short-term popularity by retaining recently accessed content, while the unprivileged section uses a sliding window to track access frequency, preserving long-term popularity trends. This hybrid partitioning structure allows LFRU to adapt to varying workload patterns. Simulation results demonstrate that LFRU outperforms pure LRU and LFU in hit ratio under dynamic workloads.
+
+Yet, static partitioning introduces rigidity. The approach may falter during sudden spikes in content popularity, such as viral events. Determining the ideal partition sizes is also a non-trivial task, often requiring manual tuning. While LFRU reduces some of the complexity of full LFU tracking, it still incurs memory overhead for maintaining counters and managing partition boundaries.
+
+\subsection{Hybrid LRU+LFU: A Pragmatic Synthesis}
+
+The hybrid LRU+LFU strategy, as outlined by~\cite{shah2023ImprovedCacheEviction}, dynamically integrates recency (LRU) and frequency (LFU) considerations without relying on static partitions or machine learning. This approach maintains counters for both metrics and uses a tunable scoring function or ratio to decide which item to evict.
+
+Depending on workload behavior, the strategy can tilt toward LRU in environments with high temporal locality (e.g., video streaming), or toward LFU when dealing with stable, frequently accessed content (e.g., static web content). Such adaptability enables real-time adjustments and makes the policy robust in unpredictable network scenarios.
+
+One of the key advantages of this approach is computational efficiency—update and eviction operations remain O(1), avoiding the latency and energy cost of deep learning-based models like ECELB. Additionally, hybrid LRU+LFU needs no historical data, partitions, or tuning—making it easier to implement in edge networks and constrained systems. Similar hybrid models for heterogeneous systems and L2 cache have also been explored~\cite{AnandKumar2014HeterogeneousMultiCross, Lin2015HighEnduranceHybridCache}.
+
+Empirical studies report that hybrid strategies outperform pure or partitioned models in terms of hit ratio and eviction latency, especially under small cache sizes and varied access patterns.
+
+\subsection{Comparative Analysis}
+
+Each of the reviewed strategies—ECELB, LFRU, and hybrid LRU+LFU—offers unique strengths. ECELB pushes performance boundaries through predictive modeling, demonstrating high hit ratios in ML-rich environments~\cite{Zhou2023CacheEviction-LearningBeladyAlgorithm}. However, it incurs substantial computational costs, limiting its practicality in edge or mobile environments.
+
+LFRU strikes a balance between performance and complexity. It operates well in dynamic and resource-constrained environments but suffers from rigidity due to static partitioning~\cite{Bilal2017CacheManagementSchemeforEfficientContentEvictionReplication}.
+
+The hybrid LRU+LFU method offers the best of both worlds. It adapts in real-time without deep learning or partitioning overhead, making it suitable for edge networks, ICNs, and latency-sensitive applications~\cite{shah2023ImprovedCacheEviction}. Supporting research in latency-aware caching~\cite{Saxena2024LatencyAwareDynamicCachingModel} and deadblock-aware eviction~\cite{Wu2022DeadblockAwareAdaptiveEvictionPolicy} further underscores the need for such lightweight, intelligent policies.
+
+\subsection*{Conclusion: The Case for Hybrid LRU+LFU}
+
+In a landscape defined by high-speed content delivery and limited cache capacity, choosing the right eviction policy is critical. While ECELB demonstrates the power of predictive ML-based caching, its complexity and cost make it a niche solution. LFRU, with its lightweight implementation, excels in flexible yet constrained systems, but may lag behind in adaptability.
+
+The hybrid LRU+LFU policy stands out as the most balanced and scalable solution. It combines adaptability, efficiency, and simplicity, making it well-suited for edge computing, ICNs, and future-proof cache architectures. As workloads grow more heterogeneous, hybrid strategies will likely become the standard in high-performance cache management.
