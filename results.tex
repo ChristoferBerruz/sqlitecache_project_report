@@ -79,7 +79,8 @@ in \autoref{fig:hit_rate_plot}.
 \end{figure*}
 
 It is clear that the HybridCache policy performs significantly
-better than all other policies. The LFU with TTL performs the worst
+better than all other policies across all number of requests.
+The LFUCache with TTL performs the worst
 among all eviction policies. These results
 are in alignment with~\cite{shah2023ImprovedCacheEviction}.
 Note that both the LRUCache and LFUCache eviction
@@ -109,7 +110,38 @@ We believe this is due to two reasons:
     it is unrealistic to expect the same results.
 \end{enumerate}
 
+Finally, note that as the number of request increases, the
+difference between the hit rate of the HybridCache
+and all other cache increases. This is a great sign
+that the eviction policy is able to adapt to unpredictable
+(random)
+workloads.
+
 \subsection{Miss Rate Analysis}
+
+\autoref{fig:miss_rate_plot} shows the miss rate as a function
+of requests for all eviction policies.
+Our miss rate is defined as
+\[miss\_rate = 1 - hit\_rate\]
+
+Note that by definition, \autoref{fig:miss_rate_plot}
+is the inverse of \autoref{fig:hit_rate_plot}. 
+One thing to point out is that at the beginning
+of the simulation, the miss rate is incredibly high.
+This makes sense because at the beginning of the simulation,
+the number of elements that can be possibly looked up
+is significantly greater than the number of elements
+currently in the cache. For example, if only
+one element is currently in the cache,
+the probability of that element \textbf{not being selected}
+for a lookup in the cache is \[\frac{499}{500} = 0.998\].
+
+Similar to the hit rate, the miss rate stabilizes
+for most cache classes. Furthermore, the HybridCache
+sees a reduction of the miss rate as the
+number of requests increases \textemdash~validating
+our hypothesis of adaptability.
+
 \begin{figure*}[!htp]
     \centering
     \includegraphics[width=\textwidth]{images/miss_rate_plot.eps} % Replace with the path to your EPS file
