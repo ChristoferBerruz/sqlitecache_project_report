@@ -33,6 +33,23 @@ with a high degree of adaptability to unpredictable workloads.
 One contribution from our project was the introduction
 of a more \textit{well-defined} simulation.
 
+By creating \sqlitecache~, we gained a deeper insight
+as to how SQLite works. The \texttt{ON CONFLICT DO}~clause
+was useful when dealing with settings and recovery.
+Triggers were practical to accurately keep track
+of the size of the cache. We believe the biggest
+lesson we learned is designing a cache \textbf{that works}
+by using
+a set of relations. This task forced us to think
+not only about how to structure data, but also how to
+reuse SQL databases for building useful data structures.
+Finally, by
+running a simulation with cache objects
+with an I/O overhead, we learned the benefits
+of a designing a simulation with parallelism in mind
+and distributing the workload across all
+available CPUs.
+
 Although the results of our project were satisfactory,
 there are several areas of improvements and expansions.
 
