@@ -150,19 +150,31 @@ our hypothesis of adaptability.
 \end{figure*}
 
 \subsection{Runtime Analysis}
+Given the persistency of all our cache implementations,
+it is worth to discuss the runtime differences among
+them. \autoref{tab:test_simulation_metrics} summarizes
+the runtime of the simulation for all the eviction policies.
 
-\begin{table}[ht]
+\begin{table}[!htp]
     \centering
     \caption{Runtime metrics for different simulations with 100,000 requests}
     \label{tab:test_simulation_metrics}
-    \begin{tabularx}{\linewidth}{XX}
+    \begin{tabularx}{\linewidth}{XXX}
         \toprule
-        \textbf{Cache} & \textbf{Runtime (s)} \\
+        \textbf{Cache} & \textbf{Runtime (s)} & \textbf{Runtime (h)} \\
         \midrule
-        HybridCache & 8484.57\\
-        LFUCache (TTL) & 8339.01\\
-        LRUCache & 8190.93\\
-        LFUCache & 8169.70\\
+        HybridCache & 8484.57 & 2.36 \\
+        LFUCache (TTL) & 8339.01 & 2.32 \\
+        LRUCache & 8190.93 & 2.28 \\
+        LFUCache & 8169.70 & 2.27 \\
         \bottomrule
     \end{tabularx}
 \end{table}
+
+As expected, TTL based policies such as LFUCache with TTL,
+and the HybridCache have the longest runtime. However,
+when compared with the lowest runtime, these two
+policies are only 2\% and 4\% slower, respectively.
+Therefore, we can argue that our choice of in-demand
+eviction of expired items was a smart design choice
+because the runtime penalty is minimal.
