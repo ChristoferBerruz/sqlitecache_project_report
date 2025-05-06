@@ -84,6 +84,31 @@ among all eviction policies. These results
 are in alignment with~\cite{shah2023ImprovedCacheEviction}.
 Note that both the LRUCache and LFUCache eviction
 policies converge at a hit rate of 20\%.
+Interestingly, \[hit\_rate \approx 0.20 = \frac{100}{500} = \frac{P}{|D|}\]
+which is a sign that caches converging
+to $\frac{P}{|D|}$ do not generalize well as it
+is the uniform random probability of selecting $P$ items
+out of a set of size $|D|$.
+
+It is important to note that our results do not
+exactly match
+the ones reported in~\cite{shah2023ImprovedCacheEviction}.
+We believe this is due to two reasons:
+
+\begin{enumerate}
+    \item \textbf{True randomness:} our methodology explicitly
+    describes that values selected from $D$ have the same
+    probability of being selected. Authors in~\cite{shah2023ImprovedCacheEviction}
+    do not specify the probabilities of items drawn from $D$.
+    \item \textbf{I/O Cost:} The hybrid cache
+    described in~\cite{shah2023ImprovedCacheEviction}
+    makes the assumption that all data structures
+    and data live in memory. Given that the HybridCache
+    incurs runtime penalty due to I/O, this affects
+    the underlying TTL eviction. Therefore,
+    it is unrealistic to expect the same results.
+\end{enumerate}
+
 \subsection{Miss Rate Analysis}
 \begin{figure*}[!htp]
     \centering
