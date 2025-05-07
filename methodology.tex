@@ -235,13 +235,13 @@ as its backing caches.
             \umldatabase[class=SQLite3]{db}
             \umlobject[class=DiskStorage]{disk}
             \begin{umlcall}[op=store $v$, return=$disk/f_{name}$]{db}{disk}
+                \begin{umlcallself}[op=pickle, return=$v_b$]{disk}
+                \end{umlcallself}
                 \begin{umlcallself}[op=compress, return=$v_c$]{disk}
                 \end{umlcallself}
                 \begin{umlcallself}[op=encrypt, return=$v_e$]{disk}
                 \end{umlcallself}
                 \begin{umlcallself}[op=create filename, return=$f_{name}$]{disk}
-                \end{umlcallself}
-                \begin{umlcallself}[op=pickle, return=$v_b$]{disk}
                 \end{umlcallself}
                 \begin{umlcallself}[op=write, return=$disk/f_{name}$]{disk}
                 \end{umlcallself}
@@ -259,9 +259,9 @@ as its backing caches.
             \umldatabase[class=SQLite3]{db}
             \umlobject[class=DiskStorage]{disk}
             \begin{umlcall}[op=read $disk/f_{name}$, return=$v$]{db}{disk}
-                \begin{umlcallself}[op=decompress, return=$v_c$]{disk}
-                \end{umlcallself}
                 \begin{umlcallself}[op=decrypt, return=$v_d$]{disk}
+                \end{umlcallself}
+                \begin{umlcallself}[op=decompress, return=$v_c$]{disk}
                 \end{umlcallself}
                 \begin{umlcallself}[op=unpickle, return=$v$]{disk}
                 \end{umlcallself}
