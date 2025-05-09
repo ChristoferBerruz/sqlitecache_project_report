@@ -1,4 +1,58 @@
 \section{Introduction}
-% Project goals and motivation
-% Description of Database systems challenge addressed
-The introduction goes here. Provide background, motivation, and an overview of the paper.
+Bounded cache system need eviction policies. However, choosing the right eviction policy
+is a difficult task as it depends on the workload. Furthermore, selecting
+the \textbf{wrong} eviction policy can lead to performance issues. For example,
+using Least Recently Used (LRU) in sequential read workloads produces
+sequential flooding where data gets removed too fast. Consequently,
+the number of
+expensive operations, for example I/O, increases.
+
+Furthermore, cache systems can be used in big data applications.
+However, due to the nature of these applications, storing values
+in memory becomes challenging. One simple solution
+is to increase Random Access Memory (RAM) capacity. Although simple,
+this solution is also costly. With the advance of consumer grade
+and high capacity SSDs, vast amounts of storage is left underutilized.
+
+The following project introduces a persistent,
+single-threaded, high capacity key-value cache using SQLite.
+This persistent cache supports three eviction policies:
+LRU, LFU (and a TTL variant), and Hybrid (LRU + LFU).
+The goal of this project is to demonstrate that it is possible
+to take advantage of secondary storage to produce an efficient
+and functional cache. Additionally, this project
+aims to replicate the findings of~\cite{shah2023ImprovedCacheEviction}
+using our persistent cache system. To do so, we designed a simulation
+that closely follows their methodology.
+
+In Section~\ref{sec:related_work} we briefly describe several eviction
+policies aimed at increasing hit rates in different workloads.
+The goal of this section is to demonstrate that this area
+is of high interest in the research community, to compare
+the different eviction policies, and to justify the reasons
+for choosing the Hybrid (LRU+LFU) policy
+introduced in~\cite{shah2023ImprovedCacheEviction} as
+our main focus of attention.
+
+In Section~\ref{sec:methodology} we describe our persistent
+cache and the simulation.
+We use multiple diagrams to explain the design,
+architecture, and implementation. This section
+covers the LRU, LFU, and Hybrid design,
+eviction workflows, encryption, compression,
+and use cases. Additionally, we focus our attention
+on the differences between our simulation and the one
+proposed in~\cite{shah2023ImprovedCacheEviction}
+given the use of a persistent cache instead of
+an in-memory cache.
+
+In Section~\ref{sec:results} we analyze the
+results of our simulation, where we successfully
+replicated the results of~\cite{shah2023ImprovedCacheEviction}.
+Furthermore, we perform a hit rate and miss rate analysis
+along with a runtime analysis of the results
+based on different eviction policies.
+
+Finally, Section~\ref{sec:conclusion}
+describes future extensions, lessons learned,
+and research ideas that can be built on top of this project.
