@@ -25,8 +25,7 @@ among all eviction policies. The simulation
 replicated unpredictable workloads by randomly inserting
 and looking up elements drawn from a set of 500 values.
 Our simulation demonstrated that the Hybrid policy
-produces the highest hit rate, as well
-as the lowest miss rate, among all eviction policies.
+produces the highest hit rate and lowest miss rate, among all eviction policies.
 These findings indicate that the policy introduced in~\cite{shah2023ImprovedCacheEviction}
 can be successfully applied to persistent cache strategies
 with a high degree of adaptability to unpredictable workloads.
@@ -44,10 +43,9 @@ a set of relations. This task forced us to think
 not only about how to structure data, but also how to
 reuse SQL databases for building useful data structures.
 Finally, by
-running a simulation with cache objects
-with an I/O overhead, we learned the benefits
-of a designing a simulation with parallelism in mind
-and distributing the workload across all
+running a simulation with I/O bound cache objects, we learned the benefits
+of designing a simulation with parallelism in mind
+by distributing the workload across all
 available CPUs.
 
 Although the results of our project were satisfactory,
@@ -58,14 +56,14 @@ distributed version of \sqlitecache.
 Second, one area of expansion is to support different
 serialization mechanisms besides pickle, such as JSON or
 MessagePack.
-Currently, our project only support storing pickle-serializable
+Currently, our project only supports storing pickle-serializable
 values inside the cache. However, pickle presents
 several security risks and portability issues~\cite{arjancodesPickle}.
 Third, this project can be enhanced by adding
 several other eviction policies including
 Most Recently Used (MRU), Random Replacement (RR),
 and First In-First Out (FIFO). Fourth,
-one interesting research area will be to run
+one interesting research activity will be to run
 the simulation again with more eviction policies.
 Finally, during our simulations, we hardcoded
 the values for the counter threshold $T$ and TTL $\tau$
