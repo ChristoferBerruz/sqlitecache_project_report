@@ -7,7 +7,8 @@
 The simulation was run
 on a Dell Laptop with a 11th Gen Intel(R) Core(TM) i7-11800H processor (8 cores, 16 threads)
 running at 2.30GHz, 64.0 GB of installed RAM,
-a 64-bit operating system with an x64-based processor
+a 64-bit operating system with an x64-based processor, and a NVMe SSD.
+We wrote the simulation
 using Python3.10 and pytest as the driver.
 We selected Pytest because the test-isolation generalizes
 well for simulations. Therefore, simulations
@@ -87,7 +88,7 @@ Note that both the LRUCache and LFUCache eviction
 policies converge at a hit rate of 20\%.
 Interestingly, \[hit\_rate \approx 0.20 = \frac{100}{500} = \frac{P}{|D|}\]
 which is a sign that caches converging
-to $\frac{P}{|D|}$ do not generalize well as it
+to $\frac{P}{|D|}$ do not generalize well as this value
 is the uniform random probability of selecting $P$ items
 out of a set of size $|D|$.
 
@@ -150,8 +151,8 @@ our hypothesis of adaptability.
 \end{figure*}
 
 \subsection{Runtime Analysis}
-Given the persistency of all our cache implementations,
-it is worth to discuss the runtime differences among
+Given the persistency of our cache implementations,
+it is worth discussing the runtime differences among
 them. \autoref{tab:test_simulation_metrics} summarizes
 the runtime of the simulation for all the eviction policies.
 
