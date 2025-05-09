@@ -36,6 +36,7 @@
   }
 
 \DeclareMathOperator{\hybridCounter}{\mathbb{C}}
+\newcommand{\sqlitecache}{\texttt{sqlitecache}}
 
 % Title and Author
 \title{SQLiteCache: A single-threaded, persistent, and high capacity key-value cache using SQLite}
@@ -59,14 +60,32 @@
 \maketitle
 
 \begin{abstract}
-The abstract goes here. It should summarize the key points of your paper in about 150–250 words.
+This project introduces \sqlitecache, a persistent, single-threaded,
+high-capacity key-value cache built using SQLite.
+The cache supports three eviction policies: Least Recently Used (LRU),
+Least Frequently Used (LFU, including a TTL variant),
+and a Hybrid policy combining LRU and LFU.
+By leveraging secondary storage, \sqlitecache~demonstrates
+that efficient and scalable caching can be achieved without
+relying solely on in-memory solutions,
+making it suitable for big data applications where memory
+constraints are a challenge. 
+    
+We replicated the findings of~\cite{shah2023ImprovedCacheEviction}
+by designing a simulation that evaluates hit rates, miss rates,
+and runtime performance across different eviction policies.
+Our results validate the adaptability of the Hybrid policy
+to unpredictable workloads, achieving the highest hit rates and lowest miss rates.
+Additionally, we highlight the practical benefits of integrating relational
+databases with caching systems, enabling efficient data management and storage.
+This work provides a foundation for future research on persistent
+caching strategies and their applications.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Keyword1, Keyword2, Keyword3, Keyword4
+Persistent Caching, SQLite, Eviction Policies, Adaptive Caching
 \end{IEEEkeywords}
 
-\newcommand{\sqlitecache}{\texttt{sqlitecache}}
 \input{introduction.tex}
 \input{related_work.tex}
 \input{methodology.tex}
